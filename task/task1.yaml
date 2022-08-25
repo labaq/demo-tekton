@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: hello-task
+spec:
+  steps:
+    - name: echo
+      image: alpine
+      script: |
+        #!/bin/sh
+        echo "Hello tekton"
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: hello-task-run
+spec:
+  taskRef:
+    # 注意，再次需要taskrun和task进行关联
+    name: hello-task

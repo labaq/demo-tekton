@@ -1,0 +1,34 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: goodbye-task
+spec:
+  steps:
+    - name: echo
+      image: alpine
+      script: |
+        #!/bin/sh
+        echo "gg tekton"
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: hello-goodbye
+spec:
+  tasks:
+    - name: hello-task
+      taskRef:
+        name: hello-task
+    - name: goodbye-task
+      runAfter:
+        - hello-task
+      taskRef:
+        name: goodbye-task
+---
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: hello-goodbye-run
+spec:
+  pipelineRef:
+    name: hello-goodbye
